@@ -1,0 +1,4 @@
+driver-port: "8080"
+worker-port: "8081"
+files: "./files"
+inputs: "../../inputs"
