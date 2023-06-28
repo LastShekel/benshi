@@ -23,12 +23,10 @@ jobs:
 
     - name: Build driver
       run:
-        cd ./cmd/driver
-        go build -o driver.exe
+        cd ./cmd/driver && go build -o driver.exe
     - name: Build worker
       run:
-        cd ./cmd/worker
-        go build -o worker.exe
+        cd ./cmd/worker && go build -o worker.exe
 
     - name: Test
       run: go test -v ./...
