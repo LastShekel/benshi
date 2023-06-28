@@ -22,9 +22,9 @@ jobs:
         go-version: 1.19
 
     - name: Build driver
-      run: go build -v ./cmd/driver
+      run: go build -C ./cmd/driver -o driver.exe
     - name: Build worker
-      run: go build -v ./cmd/worker
+      run: go build -C ./cmd/worker -o worker.exe
 
     - name: Test
       run: go test -v ./...

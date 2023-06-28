@@ -38,16 +38,11 @@ func TestTaskController_Run(t *testing.T) {
 		hc                http.Client
 		M                 int
 		N                 int
-		config            Conf
 		files             []string
-	}
-	type args struct {
-		N int
 	}
 	tests := []struct {
 		name   string
 		fields fields
-		args   args
 	}{
 		// TODO: Add test cases.
 	}
@@ -63,10 +58,9 @@ func TestTaskController_Run(t *testing.T) {
 				hc:                tt.fields.hc,
 				M:                 tt.fields.M,
 				N:                 tt.fields.N,
-				config:            tt.fields.config,
 				files:             tt.fields.files,
 			}
-			c.Run(tt.args.N)
+			c.Run()
 		})
 	}
 }
@@ -82,16 +76,11 @@ func TestTaskController_createMapTasks(t *testing.T) {
 		hc                http.Client
 		M                 int
 		N                 int
-		config            Conf
 		files             []string
-	}
-	type args struct {
-		nMap int
 	}
 	tests := []struct {
 		name   string
 		fields fields
-		args   args
 	}{
 		// TODO: Add test cases.
 	}
@@ -107,10 +96,9 @@ func TestTaskController_createMapTasks(t *testing.T) {
 				hc:                tt.fields.hc,
 				M:                 tt.fields.M,
 				N:                 tt.fields.N,
-				config:            tt.fields.config,
 				files:             tt.fields.files,
 			}
-			c.createMapTasks(tt.args.nMap)
+			c.createMapTasks()
 		})
 	}
 }
@@ -126,7 +114,6 @@ func TestTaskController_createReduceTasks(t *testing.T) {
 		hc                http.Client
 		M                 int
 		N                 int
-		config            Conf
 		files             []string
 	}
 	tests := []struct {
@@ -147,7 +134,6 @@ func TestTaskController_createReduceTasks(t *testing.T) {
 				hc:                tt.fields.hc,
 				M:                 tt.fields.M,
 				N:                 tt.fields.N,
-				config:            tt.fields.config,
 				files:             tt.fields.files,
 			}
 			c.createReduceTasks()
@@ -166,12 +152,15 @@ func TestTaskController_processTasks(t *testing.T) {
 		hc                http.Client
 		M                 int
 		N                 int
-		config            Conf
 		files             []string
+	}
+	type args struct {
+		isMap bool
 	}
 	tests := []struct {
 		name   string
 		fields fields
+		args   args
 	}{
 		// TODO: Add test cases.
 	}
@@ -187,10 +176,9 @@ func TestTaskController_processTasks(t *testing.T) {
 				hc:                tt.fields.hc,
 				M:                 tt.fields.M,
 				N:                 tt.fields.N,
-				config:            tt.fields.config,
 				files:             tt.fields.files,
 			}
-			c.processTasks()
+			c.processTasks(tt.args.isMap)
 		})
 	}
 }
@@ -206,7 +194,6 @@ func TestTaskController_sendMapTask(t *testing.T) {
 		hc                http.Client
 		M                 int
 		N                 int
-		config            Conf
 		files             []string
 	}
 	type args struct {
@@ -232,10 +219,52 @@ func TestTaskController_sendMapTask(t *testing.T) {
 				hc:                tt.fields.hc,
 				M:                 tt.fields.M,
 				N:                 tt.fields.N,
-				config:            tt.fields.config,
 				files:             tt.fields.files,
 			}
 			c.sendMapTask(tt.args.t, tt.args.url)
+		})
+	}
+}
+
+func TestTaskController_sendReduceTask(t *testing.T) {
+	type fields struct {
+		tasks             chan task
+		registeredWorkers map[string]bool
+		workersQueue      chan string
+		regMutex          *sync.Mutex
+		doneMutex         *sync.Mutex
+		sentTasks         map[string]task
+		hc                http.Client
+		M                 int
+		N                 int
+		files             []string
+	}
+	type args struct {
+		t   task
+		url string
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			c := &TaskController{
+				tasks:             tt.fields.tasks,
+				registeredWorkers: tt.fields.registeredWorkers,
+				workersQueue:      tt.fields.workersQueue,
+				regMutex:          tt.fields.regMutex,
+				doneMutex:         tt.fields.doneMutex,
+				sentTasks:         tt.fields.sentTasks,
+				hc:                tt.fields.hc,
+				M:                 tt.fields.M,
+				N:                 tt.fields.N,
+				files:             tt.fields.files,
+			}
+			c.sendReduceTask(tt.args.t, tt.args.url)
 		})
 	}
 }
